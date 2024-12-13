@@ -6,10 +6,10 @@ set -e
 # Detect operating system
 OS="$(awk -F= '/^NAME/{print $2}' /etc/os-release | tr -d '\"')"
 
-if [[ "$OS" == "Ubuntu"* ]]; then
+if [[ "$OS" == "Ubuntu"* || "$OS" == "Debian"* ]]; then
     WEBSERVER_USER="www-data"
     WEBSERVER_GROUP="www-data"
-    echo "Ubuntu detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
+    echo "$OS detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
 elif [[ "$OS" == "CentOS"* ]]; then
     if systemctl is-active --quiet nginx; then
         WEBSERVER_USER="nginx"
