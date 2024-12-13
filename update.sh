@@ -22,20 +22,17 @@ IS_DEBIAN=$(lsb_release -a 2>/dev/null | grep -i "debian" > /dev/null && echo "y
 if [[ "$OS" == "Ubuntu"* || "$OS" == "Debian"* ]]; then
     WEBSERVER_USER="www-data"
     WEBSERVER_GROUP="www-data"
-    echo "$OS detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
     echo "Your OS $OS is supported. Starting update process."
     sleep 2
 elif [[ "$OS" == "CentOS"* ]]; then
     if systemctl is-active --quiet nginx; then
         WEBSERVER_USER="nginx"
         WEBSERVER_GROUP="nginx"
-        echo "CentOS with Nginx detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
         echo "Your OS CentOS with Nginx detected. Starting update process."
         sleep 2
     elif systemctl is-active --quiet httpd; then
         WEBSERVER_USER="apache"
         WEBSERVER_GROUP="apache"
-        echo "CentOS with Apache detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
         echo "Your OS CentOS with Nginx detected. Starting update process."
         sleep 2
     else
