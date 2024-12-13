@@ -38,6 +38,12 @@ elif [[ "$OS" == "CentOS"* ]]; then
     else
         echo "CentOS detected but no supported web server (nginx or apache) is active. Exiting."
         exit 1
+    fi
+else
+    echo "Unsupported OS detected. Exiting."
+    exit 1
+fi
+
 # Define the Pterodactyl directory
 PTERODACTYL_DIR="/var/www/pterodactyl"
 
