@@ -13,6 +13,14 @@ curl -sSL https://raw.githubusercontent.com/FinnAppel/Pterodactyl-Update-Script/
 - `curl` must be installed on your system.
 - Sufficient permissions to execute commands with `sudo`.
 
+## Supported Linux (Unix) OS
+
+| Linux Distro | Support          |
+| ------- | ------------------ |
+| Debian | :heavy_check_mark: Supported|
+| Ubuntu | :heavy_check_mark: Supported|
+| CentOS | :heavy_check_mark: Supported|
+
 ## Notes
 - The script puts your panel into maintenance mode during the update process.
 
