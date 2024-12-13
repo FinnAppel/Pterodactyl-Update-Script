@@ -27,5 +27,4 @@ _Note: On some systems, it's required to be already logged in as root before exe
 
 ---
 
-Enjoy a seamless update experience with this script!
-
+If you found this useful, feel free to leave a star on my GitHub.
