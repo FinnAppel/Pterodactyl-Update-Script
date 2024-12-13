@@ -8,6 +8,7 @@ To update your Pterodactyl panel, simply run the following command:
 ```bash
 curl -sSL https://raw.githubusercontent.com/FinnAppel/Pterodactyl-Update-Script/main/update.sh | sudo bash
 ```
+_Note: On some systems, it's required to be already logged in as root before executing the one-line command (where `sudo` is in front of the command does not work)._
 
 ## Requirements
 - `curl` must be installed on your system.
