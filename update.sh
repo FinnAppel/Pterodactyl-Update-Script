@@ -11,51 +11,36 @@ OS="$(awk -F= '/^NAME/{print $2}' /etc/os-release | tr -d '\"')"
 echo     
 echo     
 echo "======================================"
-echo "    Pterodactyl Unattended Install"
+echo "    Pterodactyl Update Script"
 echo "    Your OS: $OS"
 echo "    Checking if your OS is supported."
 echo "======================================"
 echo 
-
 sleep 2
-# Check if OS is supported
-if [[ "$OS" == "Ubuntu" ]]; then
-    echo "Your OS is supported. Proceeding with the installation."
-    sleep 2
-else
-    echo "Sorry, your OS :$OS is not supported."
-    exit 1
-fi
-
-
 # Detect if the system is Debian-based
 IS_DEBIAN=$(lsb_release -a 2>/dev/null | grep -i "debian" > /dev/null && echo "yes" || echo "no")
-
 if [[ "$OS" == "Ubuntu"* || "$OS" == "Debian"* ]]; then
     WEBSERVER_USER="www-data"
     WEBSERVER_GROUP="www-data"
+    echo "$OS detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
     echo "Your OS $OS is supported. Starting update process."
     sleep 2
 elif [[ "$OS" == "CentOS"* ]]; then
     if systemctl is-active --quiet nginx; then
         WEBSERVER_USER="nginx"
         WEBSERVER_GROUP="nginx"
+        echo "CentOS with Nginx detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
         echo "Your OS CentOS with Nginx detected. Starting update process."
         sleep 2
     elif systemctl is-active --quiet httpd; then
         WEBSERVER_USER="apache"
         WEBSERVER_GROUP="apache"
+        echo "CentOS with Apache detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
         echo "Your OS CentOS with Nginx detected. Starting update process."
         sleep 2
     else
         echo "CentOS detected but no supported web server (nginx or apache) is active. Exiting."
         exit 1
-    fi
-else
-    echo "Unsupported operating system: $OS. Exiting."
-    exit 1
-fi
-
 # Define the Pterodactyl directory
 PTERODACTYL_DIR="/var/www/pterodactyl"
 
