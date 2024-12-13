@@ -23,7 +23,8 @@ _Note: On some systems, it's required to be already logged in as root before exe
 | CentOS | :heavy_check_mark: Supported|
 
 ## Notes
-- The script puts your panel into maintenance mode during the update process.
+- It updates your Pterodactyl panel to the latest available version, ensuring your installation is up to date.
+- If the panel encounters issues or breaks down, the script can also be used to reinstall it without deleting any server data, effectively restoring functionality.
 
 ---
 
