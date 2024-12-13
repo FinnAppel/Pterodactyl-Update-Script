@@ -15,7 +15,6 @@ curl -sSL https://raw.githubusercontent.com/FinnAppel/Pterodactyl-Update-Script/
 
 ## Notes
 - The script puts your panel into maintenance mode during the update process.
-- Ensure you have a backup of your database and files before running the script.
 
 ---
 
