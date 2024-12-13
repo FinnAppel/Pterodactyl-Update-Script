@@ -6,17 +6,27 @@ set -e
 # Detect operating system
 OS="$(awk -F= '/^NAME/{print $2}' /etc/os-release | tr -d '\"')"
 
+
 # Print OS name
 echo     
 echo     
 echo "======================================"
-echo "    Pterodactyl Update Script"
+echo "    Pterodactyl Unattended Install"
 echo "    Your OS: $OS"
 echo "    Checking if your OS is supported."
 echo "======================================"
 echo 
 
 sleep 2
+# Check if OS is supported
+if [[ "$OS" == "Ubuntu" ]]; then
+    echo "Your OS is supported. Proceeding with the installation."
+    sleep 2
+else
+    echo "Sorry, your OS :$OS is not supported."
+    exit 1
+fi
+
 
 # Detect if the system is Debian-based
 IS_DEBIAN=$(lsb_release -a 2>/dev/null | grep -i "debian" > /dev/null && echo "yes" || echo "no")
