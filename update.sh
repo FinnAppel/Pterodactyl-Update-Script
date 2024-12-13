@@ -81,4 +81,3 @@ php artisan up
 # Notify the user the script has completed
 echo "Pterodactyl Panel update completed successfully! If you found this useful, feel free to leave a star on my GitHub."
 echo 
-
