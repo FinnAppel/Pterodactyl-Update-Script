@@ -6,19 +6,37 @@ set -e
 # Detect operating system
 OS="$(awk -F= '/^NAME/{print $2}' /etc/os-release | tr -d '\"')"
 
+# Print OS name
+echo     
+echo     
+echo "======================================"
+echo "    Pterodactyl Update Script"
+echo "    Your OS: $OS"
+echo "    Checking if your OS is supported."
+echo "======================================"
+echo 
+
+sleep 2
+
+# Detect if the system is Debian-based
+IS_DEBIAN=$(lsb_release -a 2>/dev/null | grep -i "debian" > /dev/null && echo "yes" || echo "no")
+
 if [[ "$OS" == "Ubuntu"* || "$OS" == "Debian"* ]]; then
     WEBSERVER_USER="www-data"
     WEBSERVER_GROUP="www-data"
-    echo "$OS detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
+    echo "Your OS $OS is supported. Starting update process."
+    sleep 2
 elif [[ "$OS" == "CentOS"* ]]; then
     if systemctl is-active --quiet nginx; then
         WEBSERVER_USER="nginx"
         WEBSERVER_GROUP="nginx"
-        echo "CentOS with Nginx detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
+        echo "Your OS CentOS with Nginx detected. Starting update process."
+        sleep 2
     elif systemctl is-active --quiet httpd; then
         WEBSERVER_USER="apache"
         WEBSERVER_GROUP="apache"
-        echo "CentOS with Apache detected. Using $WEBSERVER_USER:$WEBSERVER_GROUP for ownership."
+        echo "Your OS CentOS with Nginx detected. Starting update process."
+        sleep 2
     else
         echo "CentOS detected but no supported web server (nginx or apache) is active. Exiting."
         exit 1
@@ -40,11 +58,17 @@ php artisan down
 # Download and extract the latest panel release
 curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
 
-# Set permissions
+# Fix permissions
 chmod -R 755 storage/* bootstrap/cache
 
 # Install dependencies with Composer
-composer install --no-dev --optimize-autoloader
+if [[ "$IS_DEBIAN" == "yes" ]]; then
+    # Use su for Debian-based systems
+    su -s /bin/bash -c "COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader"
+else
+    # Use sudo for other systems
+    sudo COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+fi
 
 # Clear cached views and configuration
 php artisan view:clear
@@ -54,7 +78,7 @@ php artisan config:clear
 php artisan migrate --seed --force
 
 # Set ownership of files to the web server user and group
-chown -R "$WEBSERVER_USER":"$WEBSERVER_GROUP" "$PTERODACTYL_DIR/*"
+chown -R "$WEBSERVER_USER":"$WEBSERVER_GROUP" /var/www/pterodactyl/*
 
 # Restart the queue workers
 php artisan queue:restart
@@ -63,4 +87,6 @@ php artisan queue:restart
 php artisan up
 
 # Notify the user the script has completed
-echo "Pterodactyl Panel update completed successfully."
+echo "Pterodactyl Panel update completed successfully! If you found this useful, feel free to leave a star on my GitHub."
+echo 
+
