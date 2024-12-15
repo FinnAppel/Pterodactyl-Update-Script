@@ -7,7 +7,7 @@ set -e
 OS="$(awk -F= '/^NAME/{print $2}' /etc/os-release | tr -d '\"')"
 
 
-# Print OS name
+# Show script startup
 echo     
 echo     
 echo "======================================"
@@ -17,7 +17,7 @@ echo "    Checking if your OS is supported."
 echo "======================================"
 echo 
 sleep 2
-# Detect if the system is Debian-based
+# Checking if current OS is supported.
 IS_DEBIAN=$(lsb_release -a 2>/dev/null | grep -i "debian" > /dev/null && echo "yes" || echo "no")
 if [[ "$OS" == "Ubuntu"* || "$OS" == "Debian"* ]]; then
     WEBSERVER_USER="www-data"
@@ -44,16 +44,16 @@ else
     exit 1
 fi
 
-# Define the Pterodactyl directory
+# Define pterodactyl directory
 PTERODACTYL_DIR="/var/www/pterodactyl"
 
 # Navigate to the Pterodactyl directory
 cd "$PTERODACTYL_DIR"
 
-# Put the application into maintenance mode
+# Put the panel into maintenance mode
 php artisan down
 
-# Download and extract the latest panel release
+# Download and extract the latest release
 curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
 
 # Fix permissions
@@ -61,7 +61,7 @@ chmod -R 755 storage/* bootstrap/cache
 
 # Install dependencies with Composer
 if [[ "$IS_DEBIAN" == "yes" ]]; then
-    # Use su for Debian-based systems
+    # Use su for Debian
     su -s /bin/bash -c "COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader"
 else
     # Use sudo for other systems
@@ -81,7 +81,7 @@ chown -R "$WEBSERVER_USER":"$WEBSERVER_GROUP" /var/www/pterodactyl/*
 # Restart the queue workers
 php artisan queue:restart
 
-# Bring the application out of maintenance mode
+# Bring the panel out of maintenance mode
 php artisan up
 
 # Notify the user the script has completed
