@@ -16,11 +16,13 @@ _Note: On some systems, it's required to be already logged in as root before exe
 
 ## Supported Linux (Unix) OS
 
-| Linux Distro | Support          |
-| ------- | ------------------ |
-| Debian | :heavy_check_mark: Supported|
-| Ubuntu | :heavy_check_mark: Supported|
-| CentOS | :heavy_check_mark: Supported|
+| Linux Distro | Supported Versions | Support          |
+| ------------ | ------------------ | ---------------- |
+| Ubuntu       | 22.04, 24.04       | ✅ Supported |
+| Debian       | None               | :x: Unsupported  |
+| CentOS       | None               | :x: Unsupported  |
+
+`If your Distro and/or Version is not listed, it is unsupported.`
 
 ## Notes
 - It updates your Pterodactyl panel to the latest available version, ensuring your installation is up to date.
